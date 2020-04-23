@@ -1,0 +1,20 @@
+managed; // implementation in class zbp_cal_i_holiday_nik unique;
+
+define behavior for ZCAL_I_HOLIDAY_NIK alias HolidayRoot
+persistent table ZCAL_HOLIDAY_NIK
+lock master
+//authorization master ( instance )
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+}
+
+define behavior for ZCAL_I_HOLITXT_NIK alias HolidayText
+persistent table zcal_holitxt_nik
+lock dependent ( holiday_id = holiday_id )
+{
+  update; delete;
+  field( readonly ) holiday_id;
+}
