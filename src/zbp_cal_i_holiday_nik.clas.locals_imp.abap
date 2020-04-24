@@ -179,3 +179,46 @@ CLASS lhc_HolidayRoot IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS lcl_saver DEFINITION INHERITING FROM cl_abap_behavior_saver.
+  PROTECTED SECTION.
+    METHODS save_modified REDEFINITION.
+ENDCLASS.
+
+CLASS lcl_saver IMPLEMENTATION.
+  " Importing CREATE-subEntityName
+  " Table of instance data of all instances that have been created
+  " and afterwards have been updated but not deleted
+  " Use %Control to get information what attributes have been set
+  " Importing UPDATE-subEntityName
+  " Table of keys of all instances that have been updated,
+  " but not deleted.
+  " Use %Control to get information what attributes have been updated
+  " Importing DELETE-subEntityName
+  " Table of keys of all instances, that are deleted
+
+  METHOD save_modified.
+    DATA(all_root_keys) = create-HolidayRoot.
+    APPEND LINES OF update-HolidayRoot TO all_root_keys.
+    APPEND LINES OF delete-HolidayRoot TO all_root_keys.
+
+    DATA(all_text_keys) = create-HolidayText.
+    APPEND LINES OF update-holidaytext TO all_text_keys.
+    APPEND LINES OF delete-holidaytext TO all_text_keys.
+
+    DATA(holiday_transport) = NEW zcl_cal_holiday_transport_nik( ).
+    holiday_transport->transport(
+      EXPORTING
+        i_check_mode       = abap_false
+        i_holiday_table    = CORRESPONDING #( all_root_keys )
+        i_holidaytxt_table = CORRESPONDING #( all_text_keys )
+      IMPORTING
+        e_messages         = DATA(result_messages) ).
+
+    IF line_exists( result_messages[ msgty = 'E' ] ) OR
+       line_exists( result_messages[ msgty = 'A' ] ) OR
+       line_exists( result_messages[ msgty = 'X' ] ).
+      ASSERT 1 EQ 2.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.

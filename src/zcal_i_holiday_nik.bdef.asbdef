@@ -5,7 +5,7 @@ persistent table zcal_holiday_nik
 lock master
 with additional save
 //authorization master ( instance )
-//etag master <field_name>
+etag master changedat
 {
   create;
   update;
@@ -22,6 +22,7 @@ with additional save
   define behavior for ZCAL_I_HOLITXT_NIK alias HolidayText
   persistent table zcal_holitxt_nik
   lock dependent ( holiday_id = holiday_id )
+  with additional save
   {
     update; delete;
     field ( readonly ) holiday_id;
