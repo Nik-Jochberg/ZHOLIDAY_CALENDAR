@@ -1,0 +1,5 @@
+CLASS zbp_cal_i_holiday_nik DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zcal_i_holiday_nik.
+ENDCLASS.
+
+CLASS zbp_cal_i_holiday_nik IMPLEMENTATION.
+ENDCLASS.

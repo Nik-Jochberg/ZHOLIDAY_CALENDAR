@@ -1,20 +1,31 @@
-managed; // implementation in class zbp_cal_i_holiday_nik unique;
+managed implementation in class zbp_cal_i_holiday_nik unique;
 
 define behavior for ZCAL_I_HOLIDAY_NIK alias HolidayRoot
-persistent table ZCAL_HOLIDAY_NIK
+persistent table zcal_holiday_nik
 lock master
+with additional save
 //authorization master ( instance )
 //etag master <field_name>
 {
   create;
   update;
   delete;
-}
 
-define behavior for ZCAL_I_HOLITXT_NIK alias HolidayText
-persistent table zcal_holitxt_nik
-lock dependent ( holiday_id = holiday_id )
-{
-  update; delete;
-  field( readonly ) holiday_id;
-}
+  determination det_create_AND_CHANGE_TEXTS on save
+  { field HolidayDescription; }
+
+    validation val_transport on save
+    { field holiday_id, HolidayDescription, day_of_holiday, month_of_holiday; }
+
+  }
+
+  define behavior for ZCAL_I_HOLITXT_NIK alias HolidayText
+  persistent table zcal_holitxt_nik
+  lock dependent ( holiday_id = holiday_id )
+  {
+    update; delete;
+    field ( readonly ) holiday_id;
+
+    validation val_transport on save
+    { field holiday_id, fcal_description, spras; }
+  }
