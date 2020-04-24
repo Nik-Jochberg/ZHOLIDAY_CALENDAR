@@ -20,8 +20,15 @@ composition [0..*] of ZCAL_I_HOLITXT_NIK as _HolidayTxt
            type: #FIELDGROUP_REFERENCE,
            targetQualifier: 'General',
            position: 1
-         }]
-         
+         },
+         {
+        id: 'Translation',
+        label: 'Translation',
+        type: #LINEITEM_REFERENCE,
+        position: 3,
+        targetElement: '_HolidayTxt'
+        } 
+        ]
          
     //zcal_holiday_nik
     //@Semantics.user.createdBy: true
